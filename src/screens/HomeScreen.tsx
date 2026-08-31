@@ -7,6 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useLecturaTheme } from '../theme/themeContext';
 import { AttendanceProgressCard } from '../components/AttendanceProgressCard';
 import { DateStrip } from '../components/DateStrip';
+import { CalendarModal } from '../components/CalendarModal';
 import { ClassCard } from '../components/ClassCard';
 import { EditUnitBottomSheet } from '../components/EditUnitBottomSheet';
 import { AddExtraClassModal } from '../components/AddExtraClassModal';
@@ -49,7 +50,7 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [fabOpen, setFabOpen] = useState(false);
 
   // Modals state
-  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [activeUnit, setActiveUnit] = useState<AttendanceUnit | null>(null);
   const [showAddExtraModal, setShowAddExtraModal] = useState(false);
   const [rescheduleTargetItem, setRescheduleTargetItem] = useState<ClassScheduleItem | null>(null);
@@ -280,20 +281,12 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             </Text>
           </View>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <IconButton
-              icon="help-circle-outline"
-              size={24}
-              iconColor={theme.colors.onSurfaceVariant}
-              onPress={() => setShowHelpModal(true)}
-            />
-            <IconButton
-              icon="today"
-              size={24}
-              iconColor={theme.colors.primary}
-              onPress={() => setSelectedDate(DateUtils.todayIso())}
-            />
-          </View>
+          <IconButton
+            icon="calendar-month-outline"
+            size={26}
+            iconColor={theme.colors.primary}
+            onPress={() => setShowCalendarModal(true)}
+          />
         </View>
 
         {/* Non-shifting, Free-scrolling Date Strip */}
@@ -379,11 +372,6 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
               label: 'Add Extra Class',
               onPress: () => setShowAddExtraModal(true),
             },
-            {
-              icon: 'camera-outline',
-              label: 'Scan Timetable OCR',
-              onPress: () => navigation.navigate('Timetable'),
-            },
           ]}
           onStateChange={({ open }) => setFabOpen(open)}
         />
@@ -428,54 +416,16 @@ export const HomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         onSave={handleSaveTimetable}
       />
 
-      {/* Help and Attendance Rules Dialog */}
-      <Portal>
-        <Dialog visible={showHelpModal} onDismiss={() => setShowHelpModal(false)} style={{ borderRadius: 20 }}>
-          <Dialog.Title style={{ fontWeight: 'bold' }}>Attendance Rules & Guide</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: 380, paddingHorizontal: 0 }}>
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 8, gap: 12 }}>
-              <View>
-                <Text variant="titleSmall" style={{ fontWeight: 'bold', color: theme.colors.primary }}>
-                  📊 Attendance Calculation
-                </Text>
-                <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 2 }}>
-                  Percentage = (Present Units) / (Total Conducted Units) × 100%. Cancelled sessions are strictly excluded from calculations.
-                </Text>
-              </View>
-
-              <View>
-                <Text variant="titleSmall" style={{ fontWeight: 'bold', color: theme.customColors.statusPresent }}>
-                  🛡️ Safe Bunks
-                </Text>
-                <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 2 }}>
-                  The number of consecutive future class units you can miss without letting your attendance percentage fall below your target goal.
-                </Text>
-              </View>
-
-              <View>
-                <Text variant="titleSmall" style={{ fontWeight: 'bold', color: theme.customColors.statusAbsent }}>
-                  🔄 Recovery Classes
-                </Text>
-                <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 2 }}>
-                  If your attendance is below your goal, this shows the exact number of consecutive upcoming classes you must attend to recover.
-                </Text>
-              </View>
-
-              <View>
-                <Text variant="titleSmall" style={{ fontWeight: 'bold', color: theme.colors.tertiary }}>
-                  ⏱️ Granular Units
-                </Text>
-                <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 2 }}>
-                  A 2-hour lecture counts as 2 units, while a 2-hour lab typically counts as 1 unit. You can tap individual unit pills to mark each hour independently.
-                </Text>
-              </View>
-            </ScrollView>
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <Button onPress={() => setShowHelpModal(false)}>Got it</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      {/* Calendar Date Picker Modal */}
+      <CalendarModal
+        visible={showCalendarModal}
+        selectedDate={selectedDate}
+        onApply={(dIso) => {
+          setSelectedDate(dIso);
+          setShowCalendarModal(false);
+        }}
+        onCancel={() => setShowCalendarModal(false)}
+      />
     </View>
   );
 };

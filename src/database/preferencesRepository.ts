@@ -14,7 +14,7 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   timeFormat24Hr: false,
   themeMode: 'SYSTEM',
   dynamicColors: true,
-  themeColorStyle: 'DEFAULT',
+  themeColorStyle: 'DYNAMIC',
   customThemeColor: '#6750A4',
   onboardingCompleted: false,
   confirmMarkingAbsent: false,

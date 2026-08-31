@@ -212,7 +212,7 @@ export const SettingsScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
                     </Text>
                     <Surface style={[styles.versionBadge, { backgroundColor: theme.colors.primary }]}>
                       <Text variant="labelSmall" style={{ color: theme.colors.onPrimary, fontWeight: 'bold' }}>
-                        v1.0.0
+                        v1.1.0
                       </Text>
                     </Surface>
                   </View>
@@ -600,8 +600,7 @@ export const SettingsScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
 
                 <View style={styles.themeModeRow}>
                   {[
-                    { style: 'DYNAMIC', label: 'Monet (Wallpaper)', icon: 'wallpaper' },
-                    { style: 'DEFAULT', label: 'Default Theme', icon: 'invert-colors' },
+                    { style: 'DYNAMIC', label: 'Monet', icon: 'wallpaper' },
                     { style: 'CUSTOM', label: 'Custom Seed', icon: 'palette' },
                   ].map((item) => {
                     const isSelected = themeColorStyle === item.style;
@@ -824,7 +823,7 @@ export const SettingsScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
                     Lectura
                   </Text>
                   <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
-                    Version v1.0.0
+                    Version v1.1.0
                   </Text>
                 </View>
 
